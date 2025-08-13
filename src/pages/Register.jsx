@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock, User, Phone } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-const Register: React.FC = () => {
+const Register = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -15,12 +15,12 @@ const Register: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<string[]>([]);
+  const [errors, setErrors] = useState([]);
   
   const { register } = useAuth();
   const navigate = useNavigate();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (e) => {
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
@@ -28,7 +28,7 @@ const Register: React.FC = () => {
   };
 
   const validateForm = () => {
-    const newErrors: string[] = [];
+    const newErrors = [];
 
     if (formData.password !== formData.confirmPassword) {
       newErrors.push('Passwords do not match');
@@ -42,7 +42,7 @@ const Register: React.FC = () => {
     return newErrors.length === 0;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     
     if (!validateForm()) return;
@@ -65,27 +65,27 @@ const Register: React.FC = () => {
   };
 
   return (
-          <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-xl">
+          <div className="register-page-container">
+      <div className="register-page-card">
         <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="register-page-title">
             Create your account
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="register-page-subtitle">
             Or{' '}
             <Link
               to="/login"
-                              className="font-medium text-orange-600 hover:text-orange-500"
+                              className="register-page-login-link"
             >
               sign in to your existing account
             </Link>
           </p>
         </div>
         
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="register-page-form" onSubmit={handleSubmit}>
           {errors.length > 0 && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-              <ul className="text-sm">
+            <div className="register-page-error-container">
+              <ul className="register-page-error-list">
                 {errors.map((error, index) => (
                   <li key={index}>• {error}</li>
                 ))}
@@ -93,14 +93,14 @@ const Register: React.FC = () => {
             </div>
           )}
           
-          <div className="space-y-4">
+          <div className="register-page-form-fields">
             <div>
               <label htmlFor="name" className="sr-only">
                 Full Name
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="h-5 w-5 text-gray-400" />
+              <div className="register-page-input-container">
+                <div className="register-page-input-icon">
+                  <User className="register-page-icon" />
                 </div>
                 <input
                   id="name"
@@ -109,7 +109,7 @@ const Register: React.FC = () => {
                   required
                   value={formData.name}
                   onChange={handleChange}
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  className="register-page-input"
                   placeholder="Full Name"
                 />
               </div>
@@ -119,9 +119,9 @@ const Register: React.FC = () => {
               <label htmlFor="email" className="sr-only">
                 Email address
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-400" />
+              <div className="register-page-input-container">
+                <div className="register-page-input-icon">
+                  <Mail className="register-page-icon" />
                 </div>
                 <input
                   id="email"
@@ -131,7 +131,7 @@ const Register: React.FC = () => {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  className="register-page-input"
                   placeholder="Email address"
                 />
               </div>
@@ -141,9 +141,9 @@ const Register: React.FC = () => {
               <label htmlFor="phone" className="sr-only">
                 Phone Number
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Phone className="h-5 w-5 text-gray-400" />
+              <div className="register-page-input-container">
+                <div className="register-page-input-icon">
+                  <Phone className="register-page-icon" />
                 </div>
                 <input
                   id="phone"
@@ -151,14 +151,14 @@ const Register: React.FC = () => {
                   type="tel"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  className="register-page-input"
                   placeholder="Phone Number (optional)"
                 />
               </div>
             </div>
             
             <div>
-              <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="role" className="register-page-role-label">
                 Account Type
               </label>
               <select
@@ -166,7 +166,7 @@ const Register: React.FC = () => {
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
-                className="block w-full px-3 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                className="register-page-role-select"
               >
                 <option value="customer">Customer</option>
                 <option value="admin">Restaurant Admin</option>
@@ -177,9 +177,9 @@ const Register: React.FC = () => {
               <label htmlFor="password" className="sr-only">
                 Password
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
+              <div className="register-page-input-container">
+                <div className="register-page-input-icon">
+                  <Lock className="register-page-icon" />
                 </div>
                 <input
                   id="password"
@@ -189,19 +189,19 @@ const Register: React.FC = () => {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  className="register-page-input register-page-password-input"
                   placeholder="Password"
                 />
-                <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                <div className="register-page-password-toggle">
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="text-gray-400 hover:text-gray-600"
+                    className="register-page-toggle-button"
                   >
                     {showPassword ? (
-                      <EyeOff className="h-5 w-5" />
+                      <EyeOff className="register-page-icon" />
                     ) : (
-                      <Eye className="h-5 w-5" />
+                      <Eye className="register-page-icon" />
                     )}
                   </button>
                 </div>
@@ -212,9 +212,9 @@ const Register: React.FC = () => {
               <label htmlFor="confirmPassword" className="sr-only">
                 Confirm Password
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
+              <div className="register-page-input-container">
+                <div className="register-page-input-icon">
+                  <Lock className="register-page-icon" />
                 </div>
                 <input
                   id="confirmPassword"
@@ -224,19 +224,19 @@ const Register: React.FC = () => {
                   required
                   value={formData.confirmPassword}
                   onChange={handleChange}
-                  className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  className="register-page-input register-page-password-input"
                   placeholder="Confirm Password"
                 />
-                <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                <div className="register-page-password-toggle">
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="text-gray-400 hover:text-gray-600"
+                    className="register-page-toggle-button"
                   >
                     {showConfirmPassword ? (
-                      <EyeOff className="h-5 w-5" />
+                      <EyeOff className="register-page-icon" />
                     ) : (
-                      <Eye className="h-5 w-5" />
+                      <Eye className="register-page-icon" />
                     )}
                   </button>
                 </div>
@@ -248,7 +248,7 @@ const Register: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="register-page-submit-button group"
             >
               {loading ? 'Creating account...' : 'Create account'}
             </button>

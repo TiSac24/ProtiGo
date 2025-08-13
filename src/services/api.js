@@ -1,5 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
-import { AuthResponse, Food, Cart, Order, User } from '../types';
+import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:5000/api';
 
@@ -34,23 +33,17 @@ api.interceptors.response.use(
 
 // Auth API
 export const authAPI = {
-  login: async (email: string, password: string): Promise<AuthResponse> => {
+  login: async (email, password) => {
     const response = await api.post('/auth/login', { email, password });
     return response.data;
   },
 
-  register: async (userData: {
-    name: string;
-    email: string;
-    password: string;
-    role?: string;
-    phone?: string;
-  }): Promise<AuthResponse> => {
+  register: async (userData) => {
     const response = await api.post('/auth/register', userData);
     return response.data;
   },
 
-  getProfile: async (): Promise<{ success: boolean; user: User }> => {
+  getProfile: async () => {
     const response = await api.get('/auth/profile');
     return response.data;
   },
@@ -58,31 +51,27 @@ export const authAPI = {
 
 // Food API
 export const foodAPI = {
-  getAllFoods: async (params?: {
-    category?: string;
-    search?: string;
-    sort?: string;
-  }): Promise<{ success: boolean; foods: Food[]; count: number }> => {
+  getAllFoods: async (params) => {
     const response = await api.get('/foods', { params });
     return response.data;
   },
 
-  getFoodById: async (id: string): Promise<{ success: boolean; food: Food }> => {
+  getFoodById: async (id) => {
     const response = await api.get(`/foods/${id}`);
     return response.data;
   },
 
-  createFood: async (foodData: Partial<Food>): Promise<{ success: boolean; food: Food }> => {
+  createFood: async (foodData) => {
     const response = await api.post('/foods', foodData);
     return response.data;
   },
 
-  updateFood: async (id: string, foodData: Partial<Food>): Promise<{ success: boolean; food: Food }> => {
+  updateFood: async (id, foodData) => {
     const response = await api.put(`/foods/${id}`, foodData);
     return response.data;
   },
 
-  deleteFood: async (id: string): Promise<{ success: boolean }> => {
+  deleteFood: async (id) => {
     const response = await api.delete(`/foods/${id}`);
     return response.data;
   },
@@ -90,27 +79,27 @@ export const foodAPI = {
 
 // Cart API
 export const cartAPI = {
-  getCart: async (): Promise<{ success: boolean; cart: Cart }> => {
+  getCart: async () => {
     const response = await api.get('/cart');
     return response.data;
   },
 
-  addToCart: async (foodId: string, quantity: number): Promise<{ success: boolean; cart: Cart }> => {
+  addToCart: async (foodId, quantity) => {
     const response = await api.post('/cart/add', { foodId, quantity });
     return response.data;
   },
 
-  updateCartItem: async (itemId: string, quantity: number): Promise<{ success: boolean; cart: Cart }> => {
+  updateCartItem: async (itemId, quantity) => {
     const response = await api.put(`/cart/item/${itemId}`, { quantity });
     return response.data;
   },
 
-  removeFromCart: async (itemId: string): Promise<{ success: boolean; cart: Cart }> => {
+  removeFromCart: async (itemId) => {
     const response = await api.delete(`/cart/item/${itemId}`);
     return response.data;
   },
 
-  clearCart: async (): Promise<{ success: boolean; cart: Cart }> => {
+  clearCart: async () => {
     const response = await api.delete('/cart/clear');
     return response.data;
   },
@@ -118,34 +107,27 @@ export const cartAPI = {
 
 // Order API
 export const orderAPI = {
-  createOrder: async (orderData: {
-    paymentMethod: string;
-    deliveryAddress: any;
-    notes?: string;
-  }): Promise<{ success: boolean; order: Order }> => {
+  createOrder: async (orderData) => {
     const response = await api.post('/orders', orderData);
     return response.data;
   },
 
-  getMyOrders: async (): Promise<{ success: boolean; orders: Order[]; count: number }> => {
+  getMyOrders: async () => {
     const response = await api.get('/orders/my-orders');
     return response.data;
   },
 
-  getAllOrders: async (params?: {
-    status?: string;
-    sort?: string;
-  }): Promise<{ success: boolean; orders: Order[]; count: number }> => {
+  getAllOrders: async (params) => {
     const response = await api.get('/orders/all', { params });
     return response.data;
   },
 
-  getOrderById: async (id: string): Promise<{ success: boolean; order: Order }> => {
+  getOrderById: async (id) => {
     const response = await api.get(`/orders/${id}`);
     return response.data;
   },
 
-  updateOrderStatus: async (id: string, status: string): Promise<{ success: boolean; order: Order }> => {
+  updateOrderStatus: async (id, status) => {
     const response = await api.put(`/orders/${id}/status`, { status });
     return response.data;
   },

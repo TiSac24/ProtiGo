@@ -8,7 +8,7 @@ import { formatPrice } from '../utils/currency';
 import { orderAPI } from '../services/api';
 import toast from 'react-hot-toast';
 
-const Cart: React.FC = () => {
+const Cart = () => {
   const { cart, loading, getCartTotal, clearCart } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ const Cart: React.FC = () => {
   const tax = total * 0.18; // 18% GST
   const grandTotal = total + deliveryFee + tax;
 
-  const handleAddressChange = (field: string, value: string) => {
+  const handleAddressChange = (field, value) => {
     setDeliveryAddress(prev => ({
       ...prev,
       [field]: value
@@ -55,7 +55,7 @@ const Cart: React.FC = () => {
         await clearCart();
         navigate('/orders');
       }
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to place order');
     } finally {
       setCheckoutLoading(false);
@@ -64,23 +64,23 @@ const Cart: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-orange-600"></div>
+      <div className="cart-page-loading">
+        <div className="cart-page-loading-spinner"></div>
       </div>
     );
   }
 
   if (!cart || cart.items.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Your cart is empty</h2>
-          <p className="text-gray-600 mb-6">Add some delicious food to get started!</p>
+      <div className="cart-page-empty">
+        <div className="cart-page-empty-content">
+          <h2 className="cart-page-empty-title">Your cart is empty</h2>
+          <p className="cart-page-empty-text">Add some delicious food to get started!</p>
           <Link
             to="/"
-            className="inline-flex items-center space-x-2 bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition-colors"
+            className="cart-page-empty-button"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="cart-page-button-icon" />
             <span>Continue Shopping</span>
           </Link>
         </div>
@@ -89,30 +89,30 @@ const Cart: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-6xl mx-auto px-4">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">Shopping Cart</h1>
+    <div className="cart-page-container">
+      <div className="cart-page-content">
+        <div className="cart-page-header">
+          <h1 className="cart-page-title">Shopping Cart</h1>
           <Link
             to="/"
-            className="inline-flex items-center space-x-2 text-orange-600 hover:text-orange-700 transition-colors"
+            className="cart-page-continue-shopping"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="cart-page-button-icon" />
             <span>Continue Shopping</span>
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="cart-page-layout">
           {/* Cart Items */}
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow-sm">
-              <div className="p-6 border-b">
-                <h2 className="text-xl font-semibold text-gray-800">
+          <div className="cart-page-items-section">
+            <div className="cart-page-items-container">
+              <div className="cart-page-items-header">
+                <h2 className="cart-page-items-title">
                   Cart Items ({cart.items.length})
                 </h2>
               </div>
-              <div className="p-6">
-                <div className="space-y-4">
+              <div className="cart-page-items-content">
+                <div className="cart-page-items-list">
                   {cart.items.map((item) => (
                     <CartItem key={item._id} item={item} />
                   ))}
@@ -122,70 +122,70 @@ const Cart: React.FC = () => {
 
             {/* Checkout Form */}
             {showCheckout && (
-              <div className="bg-white rounded-lg shadow-sm mt-6">
-                <div className="p-6 border-b">
-                  <h2 className="text-xl font-semibold text-gray-800">Checkout Information</h2>
+              <div className="cart-page-checkout-form">
+                <div className="cart-page-checkout-header">
+                  <h2 className="cart-page-checkout-title">Checkout Information</h2>
                 </div>
-                <div className="p-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="cart-page-checkout-content">
+                  <div className="cart-page-checkout-layout">
                     {/* Delivery Address */}
                     <div>
-                      <h3 className="text-lg font-medium text-gray-800 mb-4 flex items-center">
-                        <MapPin className="w-5 h-5 mr-2" />
+                      <h3 className="cart-page-section-title">
+                        <MapPin className="cart-page-section-icon" />
                         Delivery Address
                       </h3>
-                      <div className="space-y-3">
+                      <div className="cart-page-address-fields">
                         <input
                           type="text"
                           placeholder="Street Address"
                           value={deliveryAddress.street}
                           onChange={(e) => handleAddressChange('street', e.target.value)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                          className="cart-page-form-input"
                         />
                         <input
                           type="text"
                           placeholder="City"
                           value={deliveryAddress.city}
                           onChange={(e) => handleAddressChange('city', e.target.value)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                          className="cart-page-form-input"
                         />
                         <input
                           type="text"
                           placeholder="State"
                           value={deliveryAddress.state}
                           onChange={(e) => handleAddressChange('state', e.target.value)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                          className="cart-page-form-input"
                         />
                         <input
                           type="text"
                           placeholder="ZIP Code"
                           value={deliveryAddress.zipCode}
                           onChange={(e) => handleAddressChange('zipCode', e.target.value)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                          className="cart-page-form-input"
                         />
                         <input
                           type="text"
                           placeholder="Country"
                           value={deliveryAddress.country}
                           onChange={(e) => handleAddressChange('country', e.target.value)}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                          className="cart-page-form-input"
                         />
                       </div>
                     </div>
 
                     {/* Payment Method & Notes */}
                     <div>
-                      <h3 className="text-lg font-medium text-gray-800 mb-4 flex items-center">
-                        <CreditCard className="w-5 h-5 mr-2" />
+                      <h3 className="cart-page-section-title">
+                        <CreditCard className="cart-page-section-icon" />
                         Payment & Notes
                       </h3>
-                      <div className="space-y-4">
+                      <div className="cart-page-payment-fields">
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">Payment Method</label>
+                          <label className="cart-page-form-label">Payment Method</label>
                           <select
                             value={paymentMethod}
                             onChange={(e) => setPaymentMethod(e.target.value)}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                            className="cart-page-form-input"
                           >
                             <option value="cash">Cash on Delivery</option>
                             <option value="card">Credit/Debit Card</option>
@@ -193,13 +193,13 @@ const Cart: React.FC = () => {
                           </select>
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-2">Special Instructions</label>
+                          <label className="cart-page-form-label">Special Instructions</label>
                           <textarea
                             value={notes}
                             onChange={(e) => setNotes(e.target.value)}
                             placeholder="Any special instructions for delivery..."
                             rows={3}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                            className="cart-page-form-input"
                           />
                         </div>
                       </div>
@@ -211,26 +211,26 @@ const Cart: React.FC = () => {
           </div>
 
           {/* Order Summary */}
-          <div className="lg:col-span-1">
-            <div className="space-y-6">
-              <div className="bg-white p-6 rounded-lg shadow-sm">
-                <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
+          <div className="cart-page-summary-section">
+            <div className="cart-page-summary-container">
+              <div className="cart-page-summary-card">
+                <h2 className="cart-page-summary-title">Order Summary</h2>
                 
-                <div className="space-y-3">
-                  <div className="flex justify-between">
+                <div className="cart-page-summary-details">
+                  <div className="cart-page-summary-row">
                     <span>Subtotal:</span>
                     <span>{formatPrice(total)}</span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="cart-page-summary-row">
                     <span>Delivery Fee:</span>
                     <span>{formatPrice(deliveryFee)}</span>
                   </div>
-                  <div className="flex justify-between">
+                  <div className="cart-page-summary-row">
                     <span>Tax (18% GST):</span>
                     <span>{formatPrice(tax)}</span>
                   </div>
-                  <div className="border-t pt-3">
-                    <div className="flex justify-between font-bold text-lg">
+                  <div className="cart-page-summary-total">
+                    <div className="cart-page-summary-total-row">
                       <span>Total:</span>
                       <span>{formatPrice(grandTotal)}</span>
                     </div>
@@ -240,24 +240,24 @@ const Cart: React.FC = () => {
                 {!showCheckout ? (
                   <button
                     onClick={() => setShowCheckout(true)}
-                    className="w-full mt-6 bg-orange-600 text-white py-3 rounded-lg hover:bg-orange-700 transition-colors flex items-center justify-center space-x-2"
+                    className="cart-page-checkout-button"
                   >
-                    <CreditCard className="w-5 h-5" />
+                    <CreditCard className="cart-page-button-icon" />
                     <span>Proceed to Checkout</span>
                   </button>
                 ) : (
-                  <div className="space-y-3 mt-6">
+                  <div className="cart-page-order-actions">
                     <button
                       onClick={handlePlaceOrder}
                       disabled={checkoutLoading}
-                      className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="cart-page-place-order-button"
                     >
-                      <CreditCard className="w-5 h-5" />
+                      <CreditCard className="cart-page-button-icon" />
                       <span>{checkoutLoading ? 'Placing Order...' : 'Place Order'}</span>
                     </button>
                     <button
                       onClick={() => setShowCheckout(false)}
-                      className="w-full bg-gray-600 text-white py-2 rounded-lg hover:bg-gray-700 transition-colors"
+                      className="cart-page-back-button"
                     >
                       Back to Cart
                     </button>

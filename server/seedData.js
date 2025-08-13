@@ -7,32 +7,32 @@ dotenv.config();
 
 const sampleFoods = [
   {
-    name: 'Whey Protein Shake',
-    description: 'Premium whey protein shake with 25g protein per serving, perfect for muscle recovery',
-    price: 416.67, // ₹416.67 (equivalent to $4.99)
-    weight: '330 ml',
-    category: 'protein-shake',
+    name: 'Whey Protein',
+    description: 'Premium whey protein with 25g protein per serving, perfect for muscle recovery',
+    price: 2499, // ₹416.67 (equivalent to $4.99)
+    weight: '1 kg',
+    category: 'protein-supplement',
     image: {
-      url: 'https://images.pexels.com/photos/4052384/pexels-photo-4052384.jpeg'
+      url: 'https://www.optimumnutrition.co.in/cdn/shop/files/748927065732_1.webp?v=1742973789&width=1445'
     },
-    ingredients: ['Whey protein isolate', 'Milk', 'Banana', 'Honey'],
+    ingredients: ['Whey protein isolate'],
     nutritionInfo: {
       calories: 180,
       protein: 25,
       carbs: 15,
       fat: 2
     },
-    preparationTime: 3,
+    preparationTime: 0,
     isAvailable: true
   },
   {
-    name: 'Protein Power Bar',
+    name: 'Protein Bar',
     description: 'High-protein energy bar with nuts and chocolate, 20g protein per bar',
-    price: 333.17, // ₹333.17 (equivalent to $3.99)
+    price: 99,
     weight: '60 g',
     category: 'protein-bar',
     image: {
-      url: 'https://images.pexels.com/photos/46174/pexels-photo-46174.jpeg'
+      url: 'https://cloudinary.images-iherb.com/image/upload/f_auto,q_auto:eco/images/qst/qst00042/y/62.jpg'
     },
     ingredients: ['Protein blend', 'Almonds', 'Dark chocolate', 'Oats', 'Honey'],
     nutritionInfo: {
@@ -45,18 +45,18 @@ const sampleFoods = [
     isAvailable: true
   },
   {
-    name: 'Grilled Chicken Breast',
-    description: 'Lean grilled chicken breast with herbs and spices, 30g protein per serving',
-    price: 1084.67, // ₹1084.67 (equivalent to $12.99)
-    weight: '250 g',
-    category: 'protein-meal',
+    name: 'Banana Shake',
+    description: 'High protein shake with banana, milk, nuts and honey',
+    price: 99, 
+    weight: '250 ml',
+    category: 'protein-shake',
     image: {
-      url: 'https://images.pexels.com/photos/616354/pexels-photo-616354.jpeg'
+      url: 'https://www.allrecipes.com/thmb/NHlDzARQoQZnqQOYpEOkZyjJLYw=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/20804banana-shakeTammyLynn4x3-f07c53dc309143619f2ed3aefdabe4ae.jpg'
     },
-    ingredients: ['Chicken breast', 'Olive oil', 'Herbs', 'Spices', 'Lemon'],
+    ingredients: ['Milk', 'Banana', 'Nuts', 'Honey'],
     nutritionInfo: {
       calories: 280,
-      protein: 30,
+      protein: 10,
       carbs: 2,
       fat: 6
     },
@@ -64,13 +64,13 @@ const sampleFoods = [
     isAvailable: true
   },
   {
-    name: 'Greek Yogurt Bowl',
+    name: 'Greek Yogurt',
     description: 'High-protein Greek yogurt with berries and granola, 15g protein per bowl',
-    price: 583.67, // ₹583.67 (equivalent to $6.99)
+    price: 149, 
     weight: '200 g',
-    category: 'protein-snack',
+    category: 'protein-dessert',
     image: {
-      url: 'https://images.pexels.com/photos/3026808/pexels-photo-3026808.jpeg'
+      url: 'https://gratefulgrazer.com/wp-content/uploads/2025/03/greek-yogurt-bowl-square.jpg'
     },
     ingredients: ['Greek yogurt', 'Mixed berries', 'Granola', 'Honey', 'Nuts'],
     nutritionInfo: {
@@ -85,7 +85,7 @@ const sampleFoods = [
   {
     name: 'Protein Brownie',
     description: 'Delicious protein brownie with 12g protein, guilt-free dessert option',
-    price: 416.67, // ₹416.67 (equivalent to $4.99)
+    price: 149, 
     weight: '80 g',
     category: 'protein-dessert',
     image: {
@@ -104,20 +104,58 @@ const sampleFoods = [
   {
     name: 'BCAA Supplement',
     description: 'Branched-chain amino acid supplement for muscle recovery and growth',
-    price: 2504.17, // ₹2504.17 (equivalent to $29.99)
+    price: 999, 
     weight: '300 g',
     category: 'protein-supplement',
     image: {
-      url: 'https://images.pexels.com/photos/4052384/pexels-photo-4052384.jpeg'
+      url: 'https://m.media-amazon.com/images/I/71bYDOsB8CL._UF1000,1000_QL80_.jpg'
     },
     ingredients: ['BCAA blend', 'Electrolytes', 'Natural flavors'],
     nutritionInfo: {
       calories: 5,
-      protein: 5,
+      protein: 0,
       carbs: 1,
       fat: 0
     },
     preparationTime: 1,
+    isAvailable: true
+  },
+  {
+    name: 'Creatine Monohydrate',
+    description: 'Creatine monohydrate supplement for muscle strength and performance',
+    price: 599,
+    weight: '100 g',
+    category: 'protein-supplement',
+    image: {
+      url: 'https://m.media-amazon.com/images/I/61mQAPUdgmL._UF1000,1000_QL80_.jpg'
+    },
+    ingredients: ['Creatine monohydrate'],
+    nutritionInfo: {
+      calories: 5,
+      protein: 0,
+      carbs: 1,
+      fat: 0
+    },
+    preparationTime: 0,
+    isAvailable: true
+  },
+  {
+    name: 'Oat Meal',
+    description: 'High ProteinOatmeal with milk and honey',
+    price: 249, 
+    weight: '200 g',
+    category: 'protein-meal',
+    image: {
+      url: 'https://m.media-amazon.com/images/I/61mQAPUdgmL._UF1000,1000_QL80_.jpg'
+    },
+    ingredients: ['Whey protein', 'Oats', 'Milk', 'Honey','Nuts','Chia seeds'],
+    nutritionInfo: {
+      calories: 5,
+      protein: 30,
+      carbs: 1,
+      fat: 0
+    },
+    preparationTime: 0,
     isAvailable: true
   }
 ];

@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit, Trash2, Filter } from 'lucide-react';
-import { Food } from '../../types';
 import { foodAPI } from '../../services/api';
 import toast from 'react-hot-toast';
 import { formatPrice } from '../../utils/currency';
 
-const ManageFoods: React.FC = () => {
-  const [foods, setFoods] = useState<Food[]>([]);
+const ManageFoods = () => {
+  const [foods, setFoods] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [showAddForm, setShowAddForm] = useState(false);
-  const [editingFood, setEditingFood] = useState<Food | null>(null);
+  const [editingFood, setEditingFood] = useState(null);
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -33,7 +32,7 @@ const ManageFoods: React.FC = () => {
       setLoading(true);
       const response = await foodAPI.getAllFoods();
       setFoods(response.foods);
-    } catch (error: any) {
+    } catch (error) {
       toast.error('Failed to fetch foods');
       console.error('Error fetching foods:', error);
     } finally {
@@ -41,7 +40,7 @@ const ManageFoods: React.FC = () => {
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const foodData = {
@@ -69,12 +68,12 @@ const ManageFoods: React.FC = () => {
       setEditingFood(null);
       resetForm();
       fetchFoods();
-    } catch (error: any) {
+    } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to save food');
     }
   };
 
-  const handleEdit = (food: Food) => {
+  const handleEdit = (food) => {
     setEditingFood(food);
     setFormData({
       name: food.name,
@@ -91,13 +90,13 @@ const ManageFoods: React.FC = () => {
   };
 
 
-  const handleDelete = async (foodId: string) => {
+  const handleDelete = async (foodId) => {
     if (window.confirm('Are you sure you want to delete this food item?')) {
       try {
         await foodAPI.deleteFood(foodId);
         toast.success('Food deleted successfully!');
         fetchFoods();
-      } catch (error: any) {
+      } catch (error) {
         toast.error(error.response?.data?.message || 'Failed to delete food');
       }
     }
@@ -128,39 +127,39 @@ const ManageFoods: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-orange-600"></div>
+      <div className="manage-foods-loading">
+        <div className="manage-foods-loading-spinner"></div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-800">Manage Foods</h1>
+    <div className="manage-foods-container">
+      <div className="manage-foods-content">
+        <div className="manage-foods-header">
+          <h1 className="manage-foods-title">Manage Foods</h1>
           <button
             onClick={() => {
               setShowAddForm(true);
               setEditingFood(null);
               resetForm();
             }}
-            className="mt-4 sm:mt-0 bg-orange-600 text-white px-6 py-3 rounded-lg hover:bg-orange-700 transition-colors flex items-center space-x-2"
+            className="add-food-button"
           >
-            <Plus className="w-5 h-5" />
+            <Plus className="add-food-icon" />
             <span>Add New Food</span>
           </button>
         </div>
 
         {/* Filter */}
-        <div className="bg-white p-6 rounded-lg shadow-sm mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
-            <div className="relative">
-              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+        <div className="filter-section">
+          <div className="filter-content">
+            <div className="filter-select-container">
+              <Filter className="filter-icon" />
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                className="filter-select"
               >
                 <option value="all">All Categories</option>
                 {categories.map(category => (
@@ -175,49 +174,49 @@ const ManageFoods: React.FC = () => {
 
         {/* Add/Edit Form */}
         {showAddForm && (
-          <div className="bg-white p-6 rounded-lg shadow-sm mb-8">
-            <h2 className="text-xl font-semibold mb-4">
+          <div className="food-form-section">
+            <h2 className="food-form-title">
               {editingFood ? 'Edit Food' : 'Add New Food'}
             </h2>
-            <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <form onSubmit={handleSubmit} className="food-form">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                <label className="food-form-label">Name</label>
                 <input
                   type="text"
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  className="food-form-input"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Price (₹ INR)</label>
+                <label className="food-form-label">Price (₹ INR)</label>
                 <input
                   type="number"
                   step="0.01"
                   required
                   value={formData.price}
                   onChange={(e) => setFormData({...formData, price: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  className="food-form-input"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Weight (e.g., 330 ml, 60 g)</label>
+                <label className="food-form-label">Weight (e.g., 330 ml, 60 g)</label>
                 <input
                   type="text"
                   value={formData.weight}
                   onChange={(e) => setFormData({...formData, weight: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  className="food-form-input"
                   placeholder="e.g., 330 ml"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                <label className="food-form-label">Category</label>
                 <select
                   required
                   value={formData.category}
                   onChange={(e) => setFormData({...formData, category: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  className="food-form-input"
                 >
                   <option value="">Select Category</option>
                   {categories.map(category => (
@@ -228,60 +227,60 @@ const ManageFoods: React.FC = () => {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Preparation Time (minutes)</label>
+                <label className="food-form-label">Preparation Time (minutes)</label>
                 <input
                   type="number"
                   required
                   value={formData.preparationTime}
                   onChange={(e) => setFormData({...formData, preparationTime: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  className="food-form-input"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Protein Content (g)</label>
+                <label className="food-form-label">Protein Content (g)</label>
                 <input
                   type="number"
                   step="0.1"
                   value={formData.protein}
                   onChange={(e) => setFormData({...formData, protein: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  className="food-form-input"
                   placeholder="25.5"
                 />
               </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+              <div className="food-form-field-full-width">
+                <label className="food-form-label">Description</label>
                 <textarea
                   required
                   rows={3}
                   value={formData.description}
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  className="food-form-input"
                 />
               </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
+              <div className="food-form-field-full-width">
+                <label className="food-form-label">Image URL</label>
                 <input
                   type="url"
                   required
                   value={formData.image}
                   onChange={(e) => setFormData({...formData, image: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  className="food-form-input"
                 />
               </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700 mb-1">Ingredients (comma-separated)</label>
+              <div className="food-form-field-full-width">
+                <label className="food-form-label">Ingredients (comma-separated)</label>
                 <input
                   type="text"
                   value={formData.ingredients}
                   onChange={(e) => setFormData({...formData, ingredients: e.target.value})}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  className="food-form-input"
                   placeholder="Tomato, Cheese, Basil"
                 />
               </div>
-              <div className="md:col-span-2 flex space-x-4">
+              <div className="food-form-actions">
                 <button
                   type="submit"
-                  className="bg-orange-600 text-white px-6 py-2 rounded-lg hover:bg-orange-700 transition-colors"
+                  className="food-form-submit-button"
                 >
                   {editingFood ? 'Update Food' : 'Add Food'}
                 </button>
@@ -292,7 +291,7 @@ const ManageFoods: React.FC = () => {
                     setEditingFood(null);
                     resetForm();
                   }}
-                  className="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+                  className="food-form-cancel-button"
                 >
                   Cancel
                 </button>
@@ -303,54 +302,54 @@ const ManageFoods: React.FC = () => {
 
         {/* Foods Grid */}
         {filteredFoods.length === 0 ? (
-          <div className="text-center py-12">
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No foods found</h3>
-                          <p className="text-gray-500">Try adjusting your filter criteria.</p>
+          <div className="empty-foods-state">
+            <h3 className="empty-foods-title">No foods found</h3>
+            <p className="empty-foods-text">Try adjusting your filter criteria.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="foods-grid">
             {filteredFoods.map((food) => (
-              <div key={food._id} className="bg-white rounded-lg shadow-sm overflow-hidden">
-                <div className="h-48 overflow-hidden">
+              <div key={food._id} className="food-management-card">
+                <div className="food-management-image">
                   <img
                     src={food.image.url}
                     alt={food.name}
-                    className="w-full h-full object-cover"
+                    className="food-management-img"
                   />
                 </div>
-                <div className="p-4">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-lg font-semibold text-gray-800">{food.name}</h3>
-                    <span className="text-lg font-bold text-orange-600">
+                <div className="food-management-content">
+                  <div className="food-management-header">
+                    <h3 className="food-management-name">{food.name}</h3>
+                    <span className="food-management-price">
                       {formatPrice(food.price)}
                     </span>
                   </div>
-                  <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                  <p className="food-management-description">
                     {food.description}
                   </p>
-                  <div className="flex justify-between items-center mb-2">
-                    <span className="text-xs bg-gray-100 text-gray-800 px-2 py-1 rounded-full">
+                  <div className="food-management-badges">
+                    <span className="food-management-category-badge">
                       {food.category.replace('-', ' ').toUpperCase()}
                     </span>
                     {food.nutritionInfo?.protein && (
-                      <span className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded-full">
+                      <span className="food-management-protein-badge">
                         {food.nutritionInfo.protein}g Protein
                       </span>
                     )}
                   </div>
-                  <div className="flex justify-between items-center">
-                    <div className="flex space-x-2">
+                  <div className="food-management-actions">
+                    <div className="food-action-buttons">
                       <button
                         onClick={() => handleEdit(food)}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
+                        className="edit-food-button"
                       >
-                        <Edit className="w-4 h-4" />
+                        <Edit className="food-action-icon" />
                       </button>
                       <button
                         onClick={() => handleDelete(food._id)}
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                        className="delete-food-button"
                       >
-                        <Trash2 className="w-4 h-4" />
+                        <Trash2 className="food-action-icon" />
                       </button>
                     </div>
                     

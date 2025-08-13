@@ -27,7 +27,7 @@ A modern MERN stack application for ordering high-protein foods, shakes, and sup
 
 ### Frontend
 - **React 18+** with TypeScript
-- **Vite** for fast development
+- **Create React App** for development and build
 - **Tailwind CSS** for styling
 - **React Router** for navigation
 - **React Hot Toast** for notifications

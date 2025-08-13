@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
-const Login: React.FC = () => {
+const Login = () => {
   const [formData, setFormData] = useState({
     email: '',
     password: ''
@@ -17,14 +17,14 @@ const Login: React.FC = () => {
   
   const from = location.state?.from?.pathname || '/';
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     setFormData(prev => ({
       ...prev,
       [e.target.name]: e.target.value
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     
@@ -37,40 +37,40 @@ const Login: React.FC = () => {
   };
 
   return (
-          <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-xl">
+          <div className="login-page-container">
+      <div className="login-page-card">
         <div>
-          <div className="flex justify-center">
-            <div className="w-12 h-12 bg-orange-600 rounded-full flex items-center justify-center">
-              <span className="text-white font-bold text-lg">P</span>
+          <div className="login-page-logo-container">
+            <div className="login-page-logo">
+              <span className="login-page-logo-text">P</span>
             </div>
           </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="login-page-title">
             Welcome to Protein Hub
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="login-page-subtitle">
             Sign in to your account to continue
           </p>
-          <p className="mt-2 text-center text-sm text-gray-600">
+          <p className="login-page-subtitle">
             Or{' '}
             <Link
               to="/register"
-                              className="font-medium text-orange-600 hover:text-orange-500"
+                              className="login-page-register-link"
             >
               create a new account
             </Link>
           </p>
         </div>
         
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          <div className="space-y-4">
+        <form className="login-page-form" onSubmit={handleSubmit}>
+          <div className="login-page-form-fields">
             <div>
               <label htmlFor="email" className="sr-only">
                 Email address
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-gray-400" />
+              <div className="login-page-input-container">
+                <div className="login-page-input-icon">
+                  <Mail className="login-page-icon" />
                 </div>
                 <input
                   id="email"
@@ -80,7 +80,7 @@ const Login: React.FC = () => {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  className="login-page-input"
                   placeholder="Email address"
                 />
               </div>
@@ -90,9 +90,9 @@ const Login: React.FC = () => {
               <label htmlFor="password" className="sr-only">
                 Password
               </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-gray-400" />
+              <div className="login-page-input-container">
+                <div className="login-page-input-icon">
+                  <Lock className="login-page-icon" />
                 </div>
                 <input
                   id="password"
@@ -102,19 +102,19 @@ const Login: React.FC = () => {
                   required
                   value={formData.password}
                   onChange={handleChange}
-                  className="block w-full pl-10 pr-10 py-3 border border-gray-300 rounded-lg placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
+                  className="login-page-input login-page-password-input"
                   placeholder="Password"
                 />
-                <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+                <div className="login-page-password-toggle">
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="text-gray-400 hover:text-gray-600"
+                    className="login-page-toggle-button"
                   >
                     {showPassword ? (
-                      <EyeOff className="h-5 w-5" />
+                      <EyeOff className="login-page-icon" />
                     ) : (
-                      <Eye className="h-5 w-5" />
+                      <Eye className="login-page-icon" />
                     )}
                   </button>
                 </div>
@@ -126,15 +126,15 @@ const Login: React.FC = () => {
             <button
               type="submit"
               disabled={loading}
-                              className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-orange-600 hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                              className="login-page-submit-button group"
             >
               {loading ? 'Signing in...' : 'Sign in'}
             </button>
           </div>
         </form>
         
-        <div className="text-center">
-          <p className="text-sm text-gray-600">
+        <div className="login-page-demo-accounts">
+          <p className="login-page-demo-text">
             Demo accounts: 
             <br />
             Admin: admin@proteinhub.com / password123

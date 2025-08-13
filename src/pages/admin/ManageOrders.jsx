@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, Clock, User, MapPin } from 'lucide-react';
-import { Order } from '../../types';
 import { orderAPI } from '../../services/api';
 import toast from 'react-hot-toast';
 import { formatPrice } from '../../utils/currency';
 
-const ManageOrders: React.FC = () => {
+const ManageOrders = () => {
   console.log('=== MANAGE ORDERS COMPONENT LOADING ===');
   
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
   const [statusFilter, setStatusFilter] = useState('all');
   const [sortBy] = useState('newest');
 
@@ -28,7 +27,7 @@ const ManageOrders: React.FC = () => {
       
       console.log('Orders response:', response);
       setOrders(response.orders || []);
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error fetching orders:', error);
       const errorMessage = error.response?.data?.message || error.message || 'Failed to fetch orders';
       setError(errorMessage);
@@ -52,22 +51,22 @@ const ManageOrders: React.FC = () => {
     }
   }, [statusFilter, fetchOrders]);
 
-  const updateOrderStatus = async (orderId: string, newStatus: string) => {
+  const updateOrderStatus = async (orderId, newStatus) => {
     try {
       console.log('Updating order status:', { orderId, newStatus });
       const response = await orderAPI.updateOrderStatus(orderId, newStatus);
       console.log('Update response:', response);
       toast.success('Order status updated successfully!');
       fetchOrders(); // Refresh the orders list
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error updating order status:', error);
       const errorMessage = error.response?.data?.message || error.message || 'Failed to update order status';
       toast.error(errorMessage);
     }
   };
 
-  const getStatusColor = (status: string) => {
-    const colors: { [key: string]: string } = {
+  const getStatusColor = (status) => {
+    const colors = {
       'pending': 'bg-yellow-100 text-yellow-800 border-yellow-200',
       'confirmed': 'bg-blue-100 text-blue-800 border-blue-200',
       'preparing': 'bg-orange-100 text-orange-800 border-orange-200',
@@ -78,7 +77,7 @@ const ManageOrders: React.FC = () => {
     return colors[status] || 'bg-gray-100 text-gray-800 border-gray-200';
   };
 
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString) => {
     try {
       return new Date(dateString).toLocaleDateString('en-US', {
         year: 'numeric',
@@ -103,8 +102,8 @@ const ManageOrders: React.FC = () => {
     { value: 'cancelled', label: 'Cancelled' }
   ];
 
-  const getNextStatuses = (currentStatus: string) => {
-    const statusFlow: { [key: string]: string[] } = {
+  const getNextStatuses = (currentStatus) => {
+    const statusFlow = {
       'pending': ['confirmed', 'cancelled'],
       'confirmed': ['preparing', 'cancelled'],
       'preparing': ['ready', 'cancelled'],
@@ -120,18 +119,18 @@ const ManageOrders: React.FC = () => {
   // Error boundary - if there's an error, show a simple fallback
   if (error) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-8">Manage Orders</h1>
-          <div className="bg-red-100 p-6 rounded-lg">
-            <h2 className="text-xl font-semibold text-red-800 mb-4">❌ Error Loading Orders</h2>
-            <p className="text-red-700 mb-4">{error}</p>
+      <div className="manage-orders-error-container">
+        <div className="manage-orders-error-content">
+          <h1 className="manage-orders-error-title">Manage Orders</h1>
+          <div className="manage-orders-error-message">
+            <h2 className="manage-orders-error-heading">❌ Error Loading Orders</h2>
+            <p className="manage-orders-error-text">{error}</p>
             <button 
               onClick={() => {
                 setError(null);
                 fetchOrders();
               }}
-              className="bg-red-600 text-white px-6 py-2 rounded hover:bg-red-700"
+              className="manage-orders-error-button"
             >
               Try Again
             </button>
@@ -142,23 +141,23 @@ const ManageOrders: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold text-gray-800 mb-8">Manage Orders</h1>
+    <div className="manage-orders-container">
+      <div className="manage-orders-content">
+        <h1 className="manage-orders-title">Manage Orders</h1>
         
       
 
         {/* Simple Filters */}
-        <div className="bg-white p-6 rounded-lg shadow-sm mb-6">
-          <div className="flex flex-wrap gap-4 items-end">
+        <div className="manage-orders-filters">
+          <div className="manage-orders-filter-controls">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="manage-orders-filter-label">
                 Filter by Status
               </label>
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="manage-orders-filter-select"
               >
                 {statusOptions.map(option => (
                   <option key={option.value} value={option.value}>
@@ -170,7 +169,7 @@ const ManageOrders: React.FC = () => {
             
             <button
               onClick={fetchOrders}
-              className="bg-orange-600 text-white px-6 py-2 rounded-md hover:bg-orange-700 transition-colors"
+              className="manage-orders-refresh-button"
             >
               Refresh Orders
             </button>
@@ -180,59 +179,59 @@ const ManageOrders: React.FC = () => {
       
         {/* Orders List */}
         {loading ? (
-          <div className="space-y-4">
+          <div className="manage-orders-loading-skeleton">
             {[...Array(5)].map((_, index) => (
-              <div key={index} className="bg-white p-6 rounded-lg shadow-sm animate-pulse">
-                <div className="h-6 bg-gray-300 rounded mb-4 w-1/4"></div>
-                <div className="h-4 bg-gray-300 rounded mb-2 w-1/2"></div>
-                <div className="h-4 bg-gray-300 rounded w-1/3"></div>
+              <div key={index} className="manage-orders-skeleton-item">
+                <div className="manage-orders-skeleton-line manage-orders-skeleton-line-wide"></div>
+                <div className="manage-orders-skeleton-line manage-orders-skeleton-line-medium"></div>
+                <div className="manage-orders-skeleton-line manage-orders-skeleton-line-narrow"></div>
               </div>
             ))}
           </div>
         ) : !orders || orders.length === 0 ? (
-          <div className="bg-white p-12 rounded-lg shadow-sm text-center">
-            <Clock className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">No orders found</h3>
-            <p className="text-gray-600">No orders match your current filters.</p>
+          <div className="manage-orders-empty-state">
+            <Clock className="manage-orders-empty-icon" />
+            <h3 className="manage-orders-empty-title">No orders found</h3>
+            <p className="manage-orders-empty-text">No orders match your current filters.</p>
             <button 
               onClick={fetchOrders}
-              className="mt-4 bg-orange-600 text-white px-6 py-2 rounded hover:bg-orange-700"
+              className="manage-orders-empty-button"
             >
               Refresh Orders
             </button>
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="manage-orders-list">
             {orders.filter(order => order && order._id).map((order) => (
-              <div key={order._id} className="bg-white rounded-lg shadow-sm overflow-hidden">
-                <div className="p-6">
-                  <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-6">
+              <div key={order._id} className="manage-orders-order-card">
+                <div className="manage-orders-order-content">
+                  <div className="manage-orders-order-header">
                     <div>
-                      <h3 className="text-xl font-semibold text-gray-800 mb-2">
+                      <h3 className="manage-orders-order-id">
                         Order #{order._id.slice(-8)}
                       </h3>
-                      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-600">
-                        <div className="flex items-center">
-                          <User className="w-4 h-4 mr-1" />
+                      <div className="manage-orders-order-meta">
+                        <div className="manage-orders-meta-item">
+                          <User className="manage-orders-meta-icon" />
                           <span>{order.user?.name || 'Unknown Customer'}</span>
                         </div>
-                        <div className="flex items-center">
-                          <Clock className="w-4 h-4 mr-1" />
+                        <div className="manage-orders-meta-item">
+                          <Clock className="manage-orders-meta-icon" />
                           <span>{order.createdAt ? formatDate(order.createdAt) : 'Unknown Date'}</span>
                         </div>
-                        <div className="flex items-center">
-                          <MapPin className="w-4 h-4 mr-1" />
+                        <div className="manage-orders-meta-item">
+                          <MapPin className="manage-orders-meta-icon" />
                           <span className="capitalize">{order.paymentMethod || 'Unknown'}</span>
                         </div>
                       </div>
                     </div>
                     
-                    <div className="flex items-center space-x-4 mt-4 lg:mt-0">
-                      <span className="text-2xl font-bold text-gray-800">
+                    <div className="manage-orders-order-summary">
+                      <span className="manage-orders-order-amount">
                         {formatPrice(order.totalAmount)}
                       </span>
-                      <div className="flex items-center space-x-2">
-                        <span className={`px-3 py-1 rounded-full border text-sm font-medium ${getStatusColor(order.status)}`}>
+                      <div className="manage-orders-status-container">
+                        <span className={`manage-orders-status-badge ${getStatusColor(order.status)}`}>
                           {order.status.toUpperCase()}
                         </span>
                       </div>
@@ -240,29 +239,29 @@ const ManageOrders: React.FC = () => {
                   </div>
 
                   {/* Order Items */}
-                  <div className="mb-6">
-                    <h4 className="font-semibold text-gray-800 mb-3">Order Items</h4>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  <div className="manage-orders-items-section">
+                    <h4 className="manage-orders-items-title">Order Items</h4>
+                    <div className="manage-orders-items-grid">
                       {order.items.map((item, index) => (
-                        <div key={index} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                        <div key={index} className="manage-orders-item-card">
                           {item.food?.image?.url ? (
                             <img
                               src={item.food.image.url}
                               alt={item.food.name || 'Food item'}
-                              className="w-12 h-12 object-cover rounded-md"
+                              className="manage-orders-item-image"
                             />
                           ) : (
-                            <div className="w-12 h-12 bg-gray-200 rounded-md flex items-center justify-center">
-                              <span className="text-gray-500 text-xs">No Image</span>
+                            <div className="manage-orders-item-placeholder">
+                              <span className="manage-orders-item-placeholder-text">No Image</span>
                             </div>
                           )}
                           <div>
-                            <p className="font-medium text-gray-800">{item.food?.name || 'Unknown Food'}</p>
-                            <p className="text-sm text-gray-600">
+                            <p className="manage-orders-item-name">{item.food?.name || 'Unknown Food'}</p>
+                            <p className="manage-orders-item-details">
                               {formatPrice(item.price)} × {item.quantity}
                             </p>
                             {item.food?.nutritionInfo?.protein && (
-                              <p className="text-xs text-orange-600 font-medium">
+                              <p className="manage-orders-item-protein">
                                 {item.food.nutritionInfo.protein}g Protein
                               </p>
                             )}
@@ -274,9 +273,9 @@ const ManageOrders: React.FC = () => {
 
                   {/* Delivery Address */}
                   {order.deliveryAddress && (
-                    <div className="mb-6">
-                      <h4 className="font-semibold text-gray-800 mb-2">Delivery Address</h4>
-                      <p className="text-gray-600 bg-gray-50 p-3 rounded-lg">
+                    <div className="manage-orders-delivery-section">
+                      <h4 className="manage-orders-delivery-title">Delivery Address</h4>
+                      <p className="manage-orders-delivery-address">
                         {order.deliveryAddress.street}, {order.deliveryAddress.city}, {' '}
                         {order.deliveryAddress.state} {order.deliveryAddress.zipCode}, {' '}
                         {order.deliveryAddress.country}
@@ -286,30 +285,30 @@ const ManageOrders: React.FC = () => {
 
                   {/* Special Instructions */}
                   {order.notes && (
-                    <div className="mb-6">
-                      <h4 className="font-semibold text-gray-800 mb-2">Special Instructions</h4>
-                      <p className="text-gray-600 bg-gray-50 p-3 rounded-lg">{order.notes}</p>
+                    <div className="manage-orders-notes-section">
+                      <h4 className="manage-orders-notes-title">Special Instructions</h4>
+                      <p className="manage-orders-notes-text">{order.notes}</p>
                     </div>
                   )}
 
                   {/* Status Actions */}
-                  <div className="border-t pt-4">
-                    <h4 className="font-semibold text-gray-800 mb-3">Update Status</h4>
-                    <div className="mb-2 text-sm text-gray-600">
-                      Current Status: <span className="font-medium">{order.status}</span>
+                  <div className="manage-orders-status-actions">
+                    <h4 className="manage-orders-status-title">Update Status</h4>
+                    <div className="manage-orders-status-info">
+                      Current Status: <span className="manage-orders-current-status">{order.status}</span>
                       <br />
                       Available Actions: {getNextStatuses(order.status).join(', ') || 'None'}
                     </div>
                     {getNextStatuses(order.status).length > 0 ? (
-                      <div className="flex space-x-2">
+                      <div className="manage-orders-action-buttons">
                         {getNextStatuses(order.status).map((status) => (
                           <button
                             key={status}
                             onClick={() => updateOrderStatus(order._id, status)}
-                            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                            className={`manage-orders-action-button ${
                               status === 'cancelled' 
-                                ? 'bg-red-600 text-white hover:bg-red-700'
-                                : 'bg-green-600 text-white hover:bg-green-700'
+                                ? 'manage-orders-action-button-cancel'
+                                : 'manage-orders-action-button-update'
                             }`}
                           >
                             Mark as {status.charAt(0).toUpperCase() + status.slice(1)}
@@ -317,7 +316,7 @@ const ManageOrders: React.FC = () => {
                         ))}
                       </div>
                     ) : (
-                      <p className="text-sm text-gray-500 italic">No actions available for this status</p>
+                      <p className="manage-orders-no-actions">No actions available for this status</p>
                     )}
                   </div>
                 </div>

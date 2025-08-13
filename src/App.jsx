@@ -21,7 +21,7 @@ function App() {
     <AuthProvider>
       <CartProvider>
         <Router>
-          <div className="min-h-screen bg-gray-50">
+          <main className="app-container">
             <Navbar />
             <Routes>
               <Route path="/" element={<Home />} />
@@ -86,7 +86,7 @@ function App() {
                 },
               }}
             />
-          </div>
+          </main>
         </Router>
       </CartProvider>
     </AuthProvider>

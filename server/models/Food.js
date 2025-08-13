@@ -28,7 +28,6 @@ const foodSchema = new mongoose.Schema({
       'protein-shake',
       'protein-bar',
       'protein-meal',
-      'protein-snack',
       'protein-dessert',
       'protein-supplement'
     ]
