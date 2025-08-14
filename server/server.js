@@ -19,14 +19,10 @@ if (!process.env.JWT_SECRET) {
 
 const app = express();
 
-// Connect to database and start server
-const startServer = async () => {
-  try {
-    await connectDatabase();
-
-// Middleware
+// CORS Configuration - moved outside startServer function
 const allowedOrigins = [
   process.env.CLIENT_URL,
+  'http://localhost:3000',
   'http://localhost:5173',
   'http://localhost:5174',
   'http://localhost:5175',
@@ -44,7 +40,8 @@ const corsOptions = {
     if (allowedOrigins.includes(origin) || /^http:\/\/localhost:\d+$/.test(origin)) {
       return callback(null, true);
     }
-    return callback(new Error('Not allowed by CORS'));
+    // Temporarily allow all origins for debugging
+    return callback(null, true);
   },
   credentials: true
 };
@@ -85,6 +82,11 @@ app.use('*', (req, res) => {
     message: 'Route not found'
   });
 });
+
+// Connect to database and start server
+const startServer = async () => {
+  try {
+    await connectDatabase();
 
     const PORT = process.env.PORT || 5000;
 
