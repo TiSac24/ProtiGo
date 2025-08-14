@@ -1,12 +1,8 @@
 import axios from 'axios';
 
-<<<<<<< HEAD
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
   ? 'https://protigo-production.up.railway.app/api'
   : 'http://localhost:5000/api';
-=======
-const API_BASE_URL = 'https://protigo-production.up.railway.app';
->>>>>>> 6dcd722353a3529f9f38006a1e59ad3e63d5aa8c
 
 // Create axios instance
 const api = axios.create({
