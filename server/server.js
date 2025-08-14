@@ -33,7 +33,8 @@ const allowedOrigins = [
   'http://localhost:5176',
   'http://localhost:5177',
   'http://localhost:5178',
-  'http://localhost:5179'
+  'http://localhost:5179',
+  'https://proti-go.vercel.app'
 ].filter(Boolean);
 
 const corsOptions = {
