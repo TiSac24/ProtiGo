@@ -46,7 +46,7 @@ const Login = () => {
             </div>
           </div>
           <h2 className="login-page-title">
-            Welcome to Protein Hub
+            Welcome to ProtiGo
           </h2>
           <p className="login-page-subtitle">
             Sign in to your account to continue

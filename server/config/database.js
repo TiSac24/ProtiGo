@@ -5,7 +5,7 @@ dotenv.config();
 
 const connectDatabase = async () => {
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/food-ordering-app');
+    const conn = await mongoose.connect('mongodb+srv://Sachidanand:Sachin2004@cluster0.rkobjgh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
     console.log(`MongoDB Connected: ${conn.connection.host}`);
   } catch (error) {
     console.error(`Error: ${error.message}`);
