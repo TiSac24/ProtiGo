@@ -272,7 +272,11 @@
   }
   
   .logo-icon {
-    @apply w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center;
+    @apply w-8 h-8 flex items-center justify-center;
+  }
+  
+  .logo-image {
+    @apply w-8 h-8 object-contain;
   }
   
   .logo-text {
