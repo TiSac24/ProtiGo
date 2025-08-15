@@ -133,7 +133,7 @@ const Login = () => {
           </div>
         </form>
         
-        <div className="login-page-demo-accounts">
+        {/* <div className="login-page-demo-accounts">
           <p className="login-page-demo-text">
             Demo accounts: 
             <br />
@@ -141,7 +141,7 @@ const Login = () => {
             <br />
             Customer: customer@proteinhub.com / password123
           </p>
-        </div>
+        </div> */}
       </div>
     </div>
   );
