@@ -3,12 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ShoppingBag, User, LogOut, Menu, X } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
-// Option 1: Local SVG file
-import logoImage from '/logo.svg';
-// Option 2: Local PNG/JPG file
-// import logoImage from '/logo.png';
-// Option 3: External URL
-// const logoImage = 'https://your-domain.com/logo.png';
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,7 +22,7 @@ const Navbar = () => {
           {/* Logo */}
           <Link to="/" className="logo-container">
             <div className="logo-icon">
-              <img src={logoImage} alt="ProtiGo Logo" className="logo-image" />
+              <span className="logo-text">P</span>
             </div>
             <span className="brand-name">ProtiGo</span>
           </Link>
