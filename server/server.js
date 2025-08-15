@@ -58,12 +58,50 @@ app.use('/api/foods', foodRoutes);
 app.use('/api/cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 
-// Health check route
-app.get('/api/health', (req, res) => {
+// Root route for quick sanity check
+app.get('/', (req, res) => {
   res.status(200).json({
     success: true,
-    message: 'Server is running!'
+    message: 'API is running',
+    health: '/api/health',
+    docs: '/api/*'
   });
+});
+
+// Simple health check for Railway - moved before API routes
+app.get('/health', (req, res) => {
+  try {
+    res.status(200).json({
+      success: true,
+      message: 'Server is healthy!',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Health check failed',
+      error: error.message
+    });
+  }
+});
+
+// Health check route
+app.get('/api/health', (req, res) => {
+  try {
+    res.status(200).json({
+      success: true,
+      message: 'Server is running!',
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'API health check failed',
+      error: error.message
+    });
+  }
 });
 
 // Error handling middleware
