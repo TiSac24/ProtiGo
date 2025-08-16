@@ -169,7 +169,7 @@ const Register = () => {
                 className="register-page-role-select"
               >
                 <option value="customer">Customer</option>
-                <option value="admin">Restaurant Admin</option>
+{/*<option value="admin">Restaurant Admin</option> */}
               </select>
             </div>
             
